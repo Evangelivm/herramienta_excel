@@ -16,6 +16,9 @@ export async function POST(request) {
     // Preparar los valores para la consulta SQL
     const values = data.map(
       ({
+        campo,
+        sub_diario,
+        numero_comprobante,
         fecha_emision,
         fecha_vencimiento,
         tipo_cp,
@@ -27,6 +30,9 @@ export async function POST(request) {
         debe_haber,
         moneda,
       }) => [
+        campo,
+        sub_diario,
+        numero_comprobante,
         fecha_emision,
         fecha_vencimiento,
         tipo_cp,
@@ -42,7 +48,7 @@ export async function POST(request) {
 
     // Crear la consulta SQL para la inserción masiva
     const query = `
-      INSERT INTO masivo_copy1 (codigo_anexo, glosa_principal, debe_haber) 
+      INSERT INTO masivo_copy1 (campo, sub_diario, num_comprobante, fecha_documento, fecha_vencimiento, numero_documento, codigo_anexo, glosa_principal, debe_haber,moneda) 
       VALUES ?
     `;
 

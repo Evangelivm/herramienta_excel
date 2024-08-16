@@ -15,11 +15,52 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function Excelfile() {
   const [file, setFile] = useState(null);
   const [columnData, setColumnData] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const currentMonth = new Date().getMonth() + 1; // Obtener el mes actual (0 = Enero, 11 = Diciembre)
+  const meses = [
+    { value: "01", label: "Enero" },
+    { value: "02", label: "Febrero" },
+    { value: "03", label: "Marzo" },
+    { value: "04", label: "Abril" },
+    { value: "05", label: "Mayo" },
+    { value: "06", label: "Junio" },
+    { value: "07", label: "Julio" },
+    { value: "08", label: "Agosto" },
+    { value: "09", label: "Septiembre" },
+    { value: "10", label: "Octubre" },
+    { value: "11", label: "Noviembre" },
+    { value: "12", label: "Diciembre" },
+  ];
+  const handleSelect = (mesValue) => {
+    setSelectedMonth(mesValue);
+    setButtonDisabled(false);
+  };
+  // Filtrar los meses para que solo se muestren aquellos antes o igual al mes actual
+  const filteredMeses = meses.filter(
+    (mes) => parseInt(mes.value) <= currentMonth
+  );
+
+  // Modificar la etiqueta del mes actual para incluir "(Actual)"
+  const mesesConEtiqueta = filteredMeses.map((mes) => {
+    if (parseInt(mes.value) === currentMonth) {
+      return { ...mes, label: `${mes.label} (Actual)` };
+    }
+    return mes;
+  });
 
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
@@ -58,7 +99,6 @@ function Excelfile() {
 
         setColumnData(values);
         console.log("Número de registros:", recordCount);
-        setButtonDisabled(false);
       };
 
       reader.readAsArrayBuffer(selectedFile);
@@ -81,24 +121,22 @@ function Excelfile() {
       "identificacion",
       "nombre",
       "monto",
-      "tipo",
       "debe/haber",
       "moneda",
     ]);
 
     let campo = 1;
     let subComp = 1;
-    const now = new Date();
+
     columnData.forEach((rowValues) => {
       const subCompFormatted = String(subComp).padStart(4, "0");
 
       const row1 = [
         campo,
         11,
-        `${String(now.getMonth() + 1).padStart(2, "0")}${subCompFormatted}`,
+        `${selectedMonth}${subCompFormatted}`,
         ...rowValues.slice(0, 7),
         rowValues[7],
-        "bi",
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
@@ -107,10 +145,10 @@ function Excelfile() {
       const row2 = [
         campo,
         11,
-        `${String(now.getMonth() + 1).padStart(2, "0")}${subCompFormatted}`,
+        `${selectedMonth}${subCompFormatted}`,
         ...rowValues.slice(0, 7),
         rowValues[8],
-        "igv",
+
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
@@ -119,10 +157,9 @@ function Excelfile() {
       const row3 = [
         campo,
         11,
-        `${String(now.getMonth() + 1).padStart(2, "0")}${subCompFormatted}`,
+        `${selectedMonth}${subCompFormatted}`,
         ...rowValues.slice(0, 7),
         rowValues[9],
-        "total",
         "H",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
@@ -133,7 +170,7 @@ function Excelfile() {
     });
 
     // Obtener la fecha y hora actual
-
+    const now = new Date();
     const formattedDate = `${now.getFullYear()}-${String(
       now.getMonth() + 1
     ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
@@ -293,6 +330,23 @@ function Excelfile() {
       </div>
 
       <Separator />
+      <div className="py-4 flex gap-4">
+        <Select onValueChange={(value) => handleSelect(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Seleccione un mes" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {mesesConEtiqueta.map((mes) => (
+                <SelectItem key={mes.value} value={mes.value}>
+                  {mes.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="py-4 flex gap-4">
         <Button
           variant="outline"
