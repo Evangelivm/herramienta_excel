@@ -75,7 +75,7 @@ function Excelfile() {
         await workbook.xlsx.load(data);
         const worksheet = workbook.worksheets[0];
 
-        const columnIndices = [5, 6, 7, 8, 10, 13, 14, 15, 16, 21, 26];
+        const columnIndices = [5, 6, 7, 8, 10, 13, 14, 15, 16, 25, 26];
         const startRow = 4;
 
         const values = [];
@@ -135,35 +135,55 @@ function Excelfile() {
         campo,
         11,
         `${selectedMonth}${subCompFormatted}`,
-        ...rowValues.slice(0, 7),
+        rowValues[0],
+        rowValues[0],
+        ...rowValues.slice(2, 7),
         rowValues[7],
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
-      worksheet.addRow(row1);
 
       const row2 = [
         campo,
         11,
         `${selectedMonth}${subCompFormatted}`,
-        ...rowValues.slice(0, 7),
+        rowValues[0],
+        rowValues[0],
+        ...rowValues.slice(2, 7),
         rowValues[8],
-
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
-      worksheet.addRow(row2);
 
       const row3 = [
         campo,
         11,
         `${selectedMonth}${subCompFormatted}`,
-        ...rowValues.slice(0, 7),
+        rowValues[0],
+        rowValues[0],
+        ...rowValues.slice(2, 7),
         rowValues[9],
         "H",
         rowValues[10] === "PEN" ? "MN" : "US",
       ];
-      worksheet.addRow(row3);
+
+      const rows = [row1, row2, row3];
+
+      // Alterna colores cada 3 filas
+      const isEvenGroup = campo % 2 === 0;
+
+      rows.forEach((row) => {
+        const newRow = worksheet.addRow(row);
+        if (isEvenGroup) {
+          newRow.eachCell({ includeEmpty: true }, (cell) => {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "D3D3D3" }, // Gris claro
+            };
+          });
+        }
+      });
 
       campo++;
       subComp++;
