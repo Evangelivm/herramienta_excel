@@ -339,7 +339,7 @@ function Excelfile() {
                 <TableCell>
                   <div className="font-medium">{rowValues[9]}</div>
                 </TableCell>
-                <TableCell>{rowValues[10]}</TableCell>
+                <TableCell>{rowValues[10] === "PEN" ? "MN" : "US"}</TableCell>
               </TableRow>
             ))}
           </TableBody>
