@@ -45,6 +45,25 @@ function Excelfile() {
     { value: "11", label: "Noviembre" },
     { value: "12", label: "Diciembre" },
   ];
+  const codigoMap = {
+    5: "BA",
+    3: "BV",
+    6: "CP",
+    1: "FT",
+    9: "GS",
+    13: "LB",
+    4: "LQ",
+    7: "NA",
+    87: "NC",
+    8: "ND",
+    11: "PB",
+    10: "RA",
+    14: "RC",
+    2: "RH",
+    50: "RL",
+    37: "RV",
+    12: "TK",
+  };
   const handleSelect = (mesValue) => {
     setSelectedMonth(mesValue);
     setButtonDisabled(false);
@@ -75,8 +94,8 @@ function Excelfile() {
         await workbook.xlsx.load(data);
         const worksheet = workbook.worksheets[0];
 
-        const columnIndices = [5, 6, 7, 8, 10, 13, 14, 15, 16, 25, 26];
-        const startRow = 4;
+        const columnIndices = [5, 6, 7, 8, 10, 13, 14, 15, 16, 25, 26, 27];
+        const startRow = 2;
 
         const values = [];
         let recordCount = 0;
@@ -117,19 +136,21 @@ function Excelfile() {
       "fecha de vencimiento",
       "tipo cp",
       "serie",
-      "num cp",
       "identificacion",
       "nombre",
       "monto",
       "debe/haber",
       "moneda",
+      "igv",
     ]);
 
     let campo = 1;
     let subComp = 1;
-
     columnData.forEach((rowValues) => {
       const subCompFormatted = String(subComp).padStart(4, "0");
+      let divisionResult = ((rowValues[8] / rowValues[7]) * 100).toFixed(0);
+      let igvValue =
+        divisionResult === "18" ? "18" : divisionResult === "10" ? "10" : "";
 
       const row1 = [
         campo,
@@ -137,10 +158,19 @@ function Excelfile() {
         `${selectedMonth}${subCompFormatted}`,
         rowValues[0],
         rowValues[0],
-        ...rowValues.slice(2, 7),
-        rowValues[7],
+        codigoMap[rowValues[2]] || rowValues[2],
+        `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+        //...rowValues.slice(5, 6)
+        rowValues[5],
+        rowValues[6].substring(0, 40), //nombre
+        rowValues[7] === 0
+          ? parseFloat((rowValues[9] / rowValues[11]).toFixed(2))
+          : rowValues[10] === "USD"
+          ? parseFloat((rowValues[7] / rowValues[11]).toFixed(2))
+          : rowValues[7],
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
+        igvValue,
       ];
 
       const row2 = [
@@ -149,22 +179,36 @@ function Excelfile() {
         `${selectedMonth}${subCompFormatted}`,
         rowValues[0],
         rowValues[0],
-        ...rowValues.slice(2, 7),
-        rowValues[8],
+        codigoMap[rowValues[2]] || rowValues[2],
+        `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+        //...rowValues.slice(5, 6)
+        rowValues[5],
+        rowValues[6].substring(0, 40), //nombre
+        rowValues[10] === "USD"
+          ? parseFloat((rowValues[8] / rowValues[11]).toFixed(2))
+          : rowValues[8],
         "D",
         rowValues[10] === "PEN" ? "MN" : "US",
+        igvValue,
       ];
 
       const row3 = [
-        campo,
-        11,
-        `${selectedMonth}${subCompFormatted}`,
-        rowValues[0],
-        rowValues[0],
-        ...rowValues.slice(2, 7),
-        rowValues[9],
-        "H",
-        rowValues[10] === "PEN" ? "MN" : "US",
+        campo, //campo
+        11, //subdiario
+        `${selectedMonth}${subCompFormatted}`, // numero de comprobante
+        rowValues[0], // fecha de emision
+        rowValues[0], // fecha de vencimiento
+        codigoMap[rowValues[2]] || rowValues[2], // tipo cp
+        `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`, // serie
+        //...rowValues.slice(5, 6)
+        rowValues[5],
+        rowValues[6].substring(0, 40), //nombre
+        rowValues[10] === "USD"
+          ? parseFloat((rowValues[9] / rowValues[11]).toFixed(2))
+          : rowValues[9], // monto
+        "H", // debe y haber
+        rowValues[10] === "PEN" ? "MN" : "US", // moneda
+        igvValue,
       ];
 
       const rows = [row1, row2, row3];
