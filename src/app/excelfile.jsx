@@ -639,6 +639,8 @@ export default Excelfile;
 
 // if (rowValues[12] === 0 && rowValues[13] === 0) {
 //   const row3 = [
+//
+//
 //     campo, //campo
 //     11, //subdiario
 //     `${selectedMonth}${subCompFormatted}`, // número de comprobante
