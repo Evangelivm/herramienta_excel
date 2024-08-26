@@ -163,6 +163,7 @@ function Excelfile() {
       "debe/haber",
       "moneda",
       "igv",
+      "cuenta contable",
     ]);
 
     let campo = 1;
@@ -192,6 +193,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row1);
       }
@@ -214,6 +216,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "401111",
         ];
         rows.push(row2);
       }
@@ -236,6 +239,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row3);
       }
@@ -258,6 +262,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "401111",
         ];
         rows.push(row4);
       }
@@ -280,6 +285,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row5);
       }
@@ -302,6 +308,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "401111",
         ];
         rows.push(row6);
       }
@@ -324,6 +331,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row7);
       }
@@ -346,6 +354,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row8);
       }
@@ -368,6 +377,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          "603213",
         ];
         rows.push(row9);
       }
@@ -389,6 +399,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
+          rowValues[10] === "PEN" ? "421201" : "421202",
         ];
         rows.push(row10);
       }
@@ -409,6 +420,7 @@ function Excelfile() {
         "H", // debe y haber
         rowValues[10] === "PEN" ? "MN" : "US", // moneda
         igvValue,
+        rowValues[10] === "PEN" ? "421201" : "421202",
       ];
       rows.push(row11);
 
