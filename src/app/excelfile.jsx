@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ExcelJS from "exceljs";
 import axios from "axios";
+import { Toaster, toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -31,7 +32,8 @@ function Excelfile() {
   const [inputValue, setInputValue] = useState("");
   const [columnData, setColumnData] = useState([]);
   const [showInput, setShowInput] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isDataGenerating, setIsDataGenerating] = useState(false);
+  const [isFileGenerating, setIsFileGenerating] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState("");
   const currentMonth = new Date().getMonth() + 1; // Obtener el mes actual (0 = Enero, 11 = Diciembre)
@@ -157,7 +159,7 @@ function Excelfile() {
   };
 
   const handleGenerateXLSX = async () => {
-    setIsGenerating(true);
+    setIsFileGenerating(true);
     setButtonDisabled(true);
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Sheet 1");
@@ -478,95 +480,299 @@ function Excelfile() {
     a.click();
     URL.revokeObjectURL(url);
     setTimeout(() => {
-      setIsGenerating(false);
+      setIsFileGenerating(false);
       setButtonDisabled(false);
+      toast.success("Archivo creado con exito");
     }, 1000);
   };
 
   const handleSendToDatabase = async () => {
+    setIsDataGenerating(true);
+    setButtonDisabled(true);
     const dataToSend = [];
 
     let campo = 1;
-    let subComp = 1;
+    //  let subComp = 1;
     const now = new Date();
+    const selectedMonth = String(now.getMonth() + 1).padStart(2, "0");
+
     columnData.forEach((rowValues) => {
-      const subCompFormatted = String(subComp).padStart(4, "0");
+      const subCompFormatted = String(subCompEx).padStart(4, "0");
+      let divisionResult = ((rowValues[8] / rowValues[7]) * 100).toFixed(0);
+      let igvValue =
+        divisionResult === "18" ? "18" : divisionResult === "10" ? "10" : "";
 
+      // Verificar y agregar row1
+      if (rowValues[7] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[7] / rowValues[11]).toFixed(2))
+              : rowValues[7],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      // Verificar y agregar row2
+      if (rowValues[8] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[8] / rowValues[11]).toFixed(2))
+              : rowValues[8],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "401111",
+        });
+      }
+
+      // Verificar y agregar row3
+      if (rowValues[14] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[14] / rowValues[11]).toFixed(2))
+              : rowValues[14],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      // Verificar y agregar row4
+      if (rowValues[15] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[15] / rowValues[11]).toFixed(2))
+              : rowValues[15],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "401111",
+        });
+      }
+
+      // Verificar y agregar row5
+      if (rowValues[16] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[16] / rowValues[11]).toFixed(2))
+              : rowValues[16],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      // Verificar y agregar row6
+      if (rowValues[17] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[17] / rowValues[11]).toFixed(2))
+              : rowValues[17],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "401111",
+        });
+      }
+
+      // Verificar y agregar row7
+      if (rowValues[12] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[12] / rowValues[11]).toFixed(2))
+              : rowValues[12],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      // Verificar y agregar row8
+      if (rowValues[18] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[18] / rowValues[11]).toFixed(2))
+              : rowValues[18],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      // Verificar y agregar row9
+      if (rowValues[19] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[19] / rowValues[11]).toFixed(2))
+              : rowValues[19],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: "603213",
+        });
+      }
+
+      if (rowValues[13] !== 0) {
+        dataToSend.push({
+          campo: campo,
+          sub_diario: 11,
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
+          fecha_emision: rowValues[0],
+          fecha_vencimiento: rowValues[0],
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
+          identificacion: rowValues[5],
+          nombre: rowValues[6].substring(0, 40),
+          monto:
+            rowValues[10] === "USD"
+              ? parseFloat((rowValues[13] / rowValues[11]).toFixed(2))
+              : rowValues[13],
+          debe_haber: "D",
+          moneda: rowValues[10] === "PEN" ? "MN" : "US",
+          igv: igvValue,
+          cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
+        });
+      }
+
+      // Verificar y agregar row10
       dataToSend.push({
         campo: campo,
         sub_diario: 11,
-        numero_comprobante: `${String(now.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}${subCompFormatted}`,
+        numero_comprobante: `${selectedMonth}${subCompFormatted}`,
         fecha_emision: rowValues[0],
-        fecha_vencimiento: rowValues[1],
-        tipo_cp: rowValues[2],
-        serie: rowValues[3],
-        num_cp: rowValues[4],
+        fecha_vencimiento: rowValues[0],
+        tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
+        serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
         identificacion: rowValues[5],
-        nombre: rowValues[6],
-        monto: rowValues[7],
-        tipo: "bi",
-        debe_haber: "D",
-        moneda: rowValues[10] === "PEN" ? "MN" : "US",
-      });
-
-      dataToSend.push({
-        campo: campo,
-        sub_diario: 11,
-        numero_comprobante: `${String(now.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}${subCompFormatted}`,
-        fecha_emision: rowValues[0],
-        fecha_vencimiento: rowValues[1],
-        tipo_cp: rowValues[2],
-        serie: rowValues[3],
-        num_cp: rowValues[4],
-        identificacion: rowValues[5],
-        nombre: rowValues[6],
-        monto: rowValues[8],
-        tipo: "igv",
-        debe_haber: "D",
-        moneda: rowValues[10] === "PEN" ? "MN" : "US",
-      });
-
-      dataToSend.push({
-        campo: campo,
-        sub_diario: 11,
-        numero_comprobante: `${String(now.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}${subCompFormatted}`,
-        fecha_emision: rowValues[0],
-        fecha_vencimiento: rowValues[1],
-        tipo_cp: rowValues[2],
-        serie: rowValues[3],
-        num_cp: rowValues[4],
-        identificacion: rowValues[5],
-        nombre: rowValues[6],
-        monto: rowValues[9],
-        tipo: "total",
+        nombre: rowValues[6].substring(0, 40),
+        monto:
+          rowValues[10] === "USD"
+            ? parseFloat((rowValues[9] / rowValues[11]).toFixed(2))
+            : rowValues[9],
         debe_haber: "H",
         moneda: rowValues[10] === "PEN" ? "MN" : "US",
+        igv: igvValue,
+        cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
       });
 
       campo++;
-      subComp++;
+      subCompEx++;
     });
 
     try {
       console.log(dataToSend);
-      //const response = await axios.post("/api/dbsend", { data: dataToSend });
+      // const response = await axios.post("/api/dbsend", { data: dataToSend });
       // console.log("Datos enviados:", response.data);
     } catch (error) {
       console.error("Error al enviar datos:", error);
     }
+    setTimeout(() => {
+      setIsDataGenerating(false);
+      setButtonDisabled(false);
+      toast.success("Datos enviados con éxito");
+    }, 1000);
   };
 
   return (
     <>
+      <Toaster position="top-center" richColors />
       <div className="py-2">
         <h4 className="text-base font-medium leading-none">1.Subir archivo</h4>
       </div>
@@ -691,7 +897,7 @@ function Excelfile() {
           className="bg-green-700 text-white hover:bg-green-300"
           disabled={buttonDisabled}
         >
-          {isGenerating ? (
+          {isFileGenerating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Generando
@@ -706,7 +912,7 @@ function Excelfile() {
           className="bg-sky-700 text-white hover:bg-sky-300"
           disabled={buttonDisabled}
         >
-          {isGenerating ? (
+          {isDataGenerating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Generando
