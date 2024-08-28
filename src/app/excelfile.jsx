@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2 } from "lucide-react";
 import {
   Select,
@@ -27,7 +28,10 @@ import {
 
 function Excelfile() {
   const [file, setFile] = useState(null);
+  const [inputValue, setInputValue] = useState("");
   const [columnData, setColumnData] = useState([]);
+  const [showInput, setShowInput] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState("");
   const currentMonth = new Date().getMonth() + 1; // Obtener el mes actual (0 = Enero, 11 = Diciembre)
@@ -45,6 +49,13 @@ function Excelfile() {
     { value: "11", label: "Noviembre" },
     { value: "12", label: "Diciembre" },
   ];
+  let subCompEx = showInput ? inputValue : 1;
+
+  const subCompValue = String(inputValue).padStart(4, "0");
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
   const codigoMap = {
     5: "BA",
     3: "BV",
@@ -146,6 +157,8 @@ function Excelfile() {
   };
 
   const handleGenerateXLSX = async () => {
+    setIsGenerating(true);
+    setButtonDisabled(true);
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Sheet 1");
 
@@ -167,10 +180,9 @@ function Excelfile() {
     ]);
 
     let campo = 1;
-    let subComp = 1;
     let rows = [];
     columnData.forEach((rowValues) => {
-      const subCompFormatted = String(subComp).padStart(4, "0");
+      const subCompFormatted = String(subCompEx).padStart(4, "0");
       let divisionResult = ((rowValues[8] / rowValues[7]) * 100).toFixed(0);
       let igvValue =
         divisionResult === "18" ? "18" : divisionResult === "10" ? "10" : "";
@@ -441,7 +453,7 @@ function Excelfile() {
       });
 
       campo++;
-      subComp++;
+      subCompEx++;
       rows.length = 0;
     });
 
@@ -465,6 +477,10 @@ function Excelfile() {
     a.download = fileName;
     a.click();
     URL.revokeObjectURL(url);
+    setTimeout(() => {
+      setIsGenerating(false);
+      setButtonDisabled(false);
+    }, 1000);
   };
 
   const handleSendToDatabase = async () => {
@@ -557,7 +573,9 @@ function Excelfile() {
       <Separator />
       <div className="grid grid-cols-3 py-4">
         <form>
-          <Label htmlFor="excel">Seleccionar Archivo</Label>
+          <div className="pb-4 flex gap-4">
+            <Label htmlFor="excel">Seleccionar Archivo</Label>
+          </div>
           <Input
             id="excel"
             type="file"
@@ -607,6 +625,9 @@ function Excelfile() {
 
       <Separator />
       <div className="py-4 flex gap-4">
+        <Label htmlFor="excel">1. Escoger mes del numero de comprobante</Label>
+      </div>
+      <div className="pb-4 flex gap-4">
         <Select onValueChange={(value) => handleSelect(value)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Seleccione un mes" />
@@ -623,6 +644,46 @@ function Excelfile() {
         </Select>
       </div>
 
+      <div className="pb-4 flex gap-4">
+        <RadioGroup defaultValue="option-one">
+          <div className="pb-4 flex gap-4">
+            <Label htmlFor="excel">2. Escoger numero de comprobante</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="option-one"
+              id="option-one"
+              onClick={() => setShowInput(false)}
+            />
+            <Label htmlFor="option-one">Empezar desde 0 (0001)</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="option-two"
+              id="option-two"
+              onClick={() => setShowInput(true)}
+            />
+            <Label htmlFor="option-two">Asignar numero</Label>
+          </div>
+          {showInput && (
+            <div className="py-2 flex gap-4">
+              <Input
+                type="number"
+                placeholder="Número"
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+          <div className="pt-4 flex gap-4">
+            <Label htmlFor="excel">
+              Ejemplo: {selectedMonth}
+              {showInput ? subCompValue : "0001"}
+            </Label>
+          </div>
+        </RadioGroup>
+      </div>
+
       <div className="py-4 flex gap-4">
         <Button
           variant="outline"
@@ -630,7 +691,14 @@ function Excelfile() {
           className="bg-green-700 text-white hover:bg-green-300"
           disabled={buttonDisabled}
         >
-          Generar XLSX
+          {isGenerating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Generando
+            </>
+          ) : (
+            "Generar XLSX"
+          )}
         </Button>
         <Button
           variant="outline"
@@ -638,7 +706,14 @@ function Excelfile() {
           className="bg-sky-700 text-white hover:bg-sky-300"
           disabled={buttonDisabled}
         >
-          Enviar a Base de Datos
+          {isGenerating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Generando
+            </>
+          ) : (
+            "Enviar a Base de Datos"
+          )}
         </Button>
       </div>
     </>
