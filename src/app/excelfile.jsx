@@ -207,7 +207,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row1);
       }
@@ -253,7 +253,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row3);
       }
@@ -299,7 +299,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row5);
       }
@@ -345,7 +345,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row7);
       }
@@ -368,7 +368,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row8);
       }
@@ -391,7 +391,7 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          "603213",
+          "603219",
         ];
         rows.push(row9);
       }
@@ -521,7 +521,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -567,7 +567,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -613,7 +613,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -659,7 +659,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -682,7 +682,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -705,7 +705,7 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: "603213",
+          cuenta_contable: "603219",
         });
       }
 
@@ -890,7 +890,7 @@ function Excelfile() {
         </RadioGroup>
       </div>
 
-      <div className="py-4 flex gap-4">
+      <div className="pt-4 flex gap-4">
         <Button
           variant="outline"
           onClick={handleGenerateXLSX}
