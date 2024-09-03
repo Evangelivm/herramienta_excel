@@ -490,13 +490,15 @@ function Excelfile() {
     setIsDataGenerating(true);
     setButtonDisabled(true);
     const dataToSend = [];
-
+    // hacer otro json dentro del foreach para detectar el primero y modificarlo
     let campo = 1;
     //  let subComp = 1;
     const now = new Date();
     const selectedMonth = String(now.getMonth() + 1).padStart(2, "0");
 
     columnData.forEach((rowValues) => {
+      // hacer otro json dentro del foreach para detectar el primero y modificarlo
+      const dataTempToSend = [];
       const subCompFormatted = String(subCompEx).padStart(4, "0");
       let divisionResult = ((rowValues[8] / rowValues[7]) * 100).toFixed(0);
       let igvValue =
@@ -504,38 +506,59 @@ function Excelfile() {
 
       // Verificar y agregar row1
       if (rowValues[7] !== 0) {
-        dataToSend.push({
-          campo: campo,
-          sub_diario: 11,
-          numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
-          tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
-          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
-          identificacion: rowValues[5],
-          nombre: rowValues[6].substring(0, 40),
+        dataTempToSend.push({
+          campo: campo, //Campo
+          sub_diario: 11, // Sub Diario
+          numero_comprobante: `${selectedMonth}${subCompFormatted}`, // Numero de Comprobante
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "), // Fecha de Comprobante
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          tipo_cp: codigoMap[rowValues[2]] || rowValues[2], // Tipo de documento
+          serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`, // Numero de documento
+          identificacion: rowValues[5], // Aparecer a partir de la segunda repeticion de codigo de anexo
+
+          nombre: rowValues[6].substring(0, 40), // Glosa Principal y Glosa Detalle
+          // Importe Original
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[7] / rowValues[11]).toFixed(2))
               : rowValues[7],
-          debe_haber: "D",
-          moneda: rowValues[10] === "PEN" ? "MN" : "US",
-          igv: igvValue,
+          debe_haber: "D", // Debe / Haber
+          moneda: rowValues[10] === "PEN" ? "MN" : "US", // Codigo de Moneda
+          igv: igvValue, // Tasa IGV
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row2
       if (rowValues[8] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -545,20 +568,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "401111",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row3
       if (rowValues[14] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -568,20 +604,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row4
       if (rowValues[15] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -591,20 +640,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "401111",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row5
       if (rowValues[16] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -614,20 +676,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row6
       if (rowValues[17] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -637,20 +712,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "401111",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row7
       if (rowValues[12] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -660,20 +748,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row8
       if (rowValues[18] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -683,20 +784,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row9
       if (rowValues[19] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -706,19 +820,32 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: "603219",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       if (rowValues[13] !== 0) {
-        dataToSend.push({
+        dataTempToSend.push({
           campo: campo,
           sub_diario: 11,
           numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-          fecha_emision: rowValues[0],
-          fecha_vencimiento: rowValues[0],
+          fecha_emision: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          fecha_vencimiento: new Date(rowValues[0])
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
+
           nombre: rowValues[6].substring(0, 40),
           monto:
             rowValues[10] === "USD"
@@ -728,19 +855,33 @@ function Excelfile() {
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
           cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
+          codigo_anexo_aux: "",
+          tipo_doc_ref: "",
+          num_doc_ref: "",
+          fecha_doc_ref: null,
+          tipo_convers: "V",
+          flag_conver_mon: "S",
         });
       }
 
       // Verificar y agregar row10
-      dataToSend.push({
+      // Este es el total
+      dataTempToSend.push({
         campo: campo,
         sub_diario: 11,
         numero_comprobante: `${selectedMonth}${subCompFormatted}`,
-        fecha_emision: rowValues[0],
-        fecha_vencimiento: rowValues[0],
+        fecha_emision: new Date(rowValues[0])
+          .toISOString()
+          .slice(0, 19)
+          .replace("T", " "),
+        fecha_vencimiento: new Date(rowValues[0])
+          .toISOString()
+          .slice(0, 19)
+          .replace("T", " "),
         tipo_cp: codigoMap[rowValues[2]] || rowValues[2],
         serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
         identificacion: rowValues[5],
+
         nombre: rowValues[6].substring(0, 40),
         monto:
           rowValues[10] === "USD"
@@ -750,16 +891,32 @@ function Excelfile() {
         moneda: rowValues[10] === "PEN" ? "MN" : "US",
         igv: igvValue,
         cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
+        codigo_anexo_aux: "SAT",
+        tipo_doc_ref: "",
+        num_doc_ref: "",
+        fecha_doc_ref: null,
+        tipo_convers: "V",
+        flag_conver_mon: "S",
       });
 
       campo++;
       subCompEx++;
+      // primero filtrar el primero de los array
+      dataTempToSend[0].tipo_doc_ref = "OC";
+      dataTempToSend[0].num_doc_ref = "SN";
+      dataTempToSend[0].fecha_doc_ref = new Date(rowValues[0])
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      dataToSend.push(...dataTempToSend);
+      // borrar el array
+      dataTempToSend.value = 0;
     });
 
     try {
       console.log(dataToSend);
-      // const response = await axios.post("/api/dbsend", { data: dataToSend });
-      // console.log("Datos enviados:", response.data);
+      const response = await axios.post("/api/dbsend", { data: dataToSend });
+      console.log("Datos enviados:", response.data);
     } catch (error) {
       console.error("Error al enviar datos:", error);
     }
