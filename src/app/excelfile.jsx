@@ -413,7 +413,8 @@ function Excelfile() {
           "D",
           rowValues[10] === "PEN" ? "MN" : "US",
           igvValue,
-          rowValues[10] === "PEN" ? "421201" : "421202",
+          //rowValues[10] === "PEN" ? "421201" : "421202",
+          "641901",
         ];
         rows.push(row10);
       }
@@ -854,7 +855,8 @@ function Excelfile() {
           debe_haber: "D",
           moneda: rowValues[10] === "PEN" ? "MN" : "US",
           igv: igvValue,
-          cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
+          //cuenta_contable: rowValues[10] === "PEN" ? "421201" : "421202",
+          cuenta_contable: "641901",
           codigo_anexo_aux: "",
           tipo_doc_ref: "",
           num_doc_ref: "",
