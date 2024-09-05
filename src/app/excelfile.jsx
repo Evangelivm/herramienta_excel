@@ -914,16 +914,17 @@ function Excelfile() {
     });
 
     try {
-      console.log(dataToSend);
+      //console.log(dataToSend);
       const response = await axios.post("/api/dbsend", { data: dataToSend });
       console.log("Datos enviados:", response.data);
+      toast.success("Datos enviados con éxito");
     } catch (error) {
       console.error("Error al enviar datos:", error);
+      toast.error("Datos enviados con éxito");
     }
     setTimeout(() => {
       setIsDataGenerating(false);
       setButtonDisabled(false);
-      toast.success("Datos enviados con éxito");
     }, 1000);
   };
 
