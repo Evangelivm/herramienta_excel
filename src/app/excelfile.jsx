@@ -157,7 +157,24 @@ function Excelfile() {
       reader.readAsArrayBuffer(selectedFile);
     }
   };
+  const queryId = async () => {
+    try {
+      // Realizar la solicitud GET a la API
+      const response = await axios.get("/api/query");
 
+      // Verificar que la solicitud fue exitosa
+      console.log("Datos recibidos:", response.data);
+
+      // Mostrar mensaje de éxito con el ID recibido
+      toast.info(
+        `El número de registro mas reciente es: ${response.data.nextId}`
+      );
+    } catch (error) {
+      // En caso de error, mostrar un mensaje adecuado
+      console.error("Error al obtener los datos:", error);
+      toast.error("Hubo un error, intentelo mas tarde.");
+    }
+  };
   const handleGenerateXLSX = async () => {
     setIsFileGenerating(true);
     setButtonDisabled(true);
@@ -495,7 +512,7 @@ function Excelfile() {
     let campo = 1;
     //  let subComp = 1;
     const now = new Date();
-    const selectedMonth = String(now.getMonth() + 1).padStart(2, "0");
+    //const selectedMonth = String(now.getMonth() + 1).padStart(2, "0");
 
     columnData.forEach((rowValues) => {
       // hacer otro json dentro del foreach para detectar el primero y modificarlo
@@ -919,10 +936,12 @@ function Excelfile() {
       //console.log(dataToSend);
       const response = await axios.post("/api/dbsend", { data: dataToSend });
       console.log("Datos enviados:", response.data);
-      toast.success("Datos enviados con éxito");
+      toast.success(
+        `Datos enviados con éxito, el último numero de registro es: ${response.data.last_reg}`
+      );
     } catch (error) {
       console.error("Error al enviar datos:", error);
-      toast.error("Datos enviados con éxito");
+      toast.error("Error al enviar datos");
     }
     setTimeout(() => {
       setIsDataGenerating(false);
@@ -1050,26 +1069,43 @@ function Excelfile() {
         </RadioGroup>
       </div>
 
-      <div className="pt-4 flex gap-4">
+      <div className="pt-4 flex justify-between gap-4">
+        <div className="flex gap-4">
+          <Button
+            variant="outline"
+            onClick={handleGenerateXLSX}
+            className="bg-green-700 text-white hover:bg-green-300"
+            disabled={buttonDisabled}
+          >
+            {isFileGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Generando
+              </>
+            ) : (
+              "Generar XLSX"
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleSendToDatabase}
+            className="bg-sky-700 text-white hover:bg-sky-300"
+            disabled={buttonDisabled}
+          >
+            {isDataGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Generando
+              </>
+            ) : (
+              "Enviar a Base de Datos"
+            )}
+          </Button>
+        </div>
         <Button
           variant="outline"
-          onClick={handleGenerateXLSX}
-          className="bg-green-700 text-white hover:bg-green-300"
-          disabled={buttonDisabled}
-        >
-          {isFileGenerating ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generando
-            </>
-          ) : (
-            "Generar XLSX"
-          )}
-        </Button>
-        <Button
-          variant="outline"
-          onClick={handleSendToDatabase}
-          className="bg-sky-700 text-white hover:bg-sky-300"
+          onClick={queryId}
+          className="bg-red-700 text-white hover:bg-red-300"
           disabled={buttonDisabled}
         >
           {isDataGenerating ? (
@@ -1078,7 +1114,7 @@ function Excelfile() {
               Generando
             </>
           ) : (
-            "Enviar a Base de Datos"
+            "Numero de registro reciente"
           )}
         </Button>
       </div>

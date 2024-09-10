@@ -62,37 +62,47 @@ export async function POST(request) {
 
     // Crear la consulta SQL para la inserción masiva
     const query = `
-      INSERT INTO masivo_copy1 (
-        campo,
-        sub_diario,
-        num_comprobante,
-        fecha_documento,
-        fecha_vencimiento,
-        tipo_documento,
-        numero_documento,
-        codigo_anexo,
-        glosa_principal,
-        importe_original,
-        debe_haber,
-        cod_moneda,
-        tasa_igv,
-        cuenta_contable,
-        codigo_auxiliar,
-        tipo_doc_referencia,
-        num_doc_referencia,
-        fecha_doc_referencia,
-        tipo_conversion,
-        flag_conversion
-      ) 
-      VALUES ?
-    `;
+  INSERT INTO masivo (
+    campo,
+    sub_diario,
+    num_comprobante,
+    fecha_documento,
+    fecha_vencimiento,
+    tipo_documento,
+    numero_documento,
+    codigo_anexo,
+    glosa_principal,
+    importe_original,
+    debe_haber,
+    cod_moneda,
+    tasa_igv,
+    cuenta_contable,
+    codigo_auxiliar,
+    tipo_doc_referencia,
+    num_doc_referencia,
+    fecha_doc_referencia,
+    tipo_conversion,
+    flag_conversion
+  ) 
+  VALUES ?
+`;
 
     // Ejecutar la consulta de inserción masiva
     const [result] = await conn.query(query, [values]);
 
+    // Obtener el primer ID autoincremental generado
+    const [insertedIdResult] = await conn.query(
+      "SELECT LAST_INSERT_ID() AS lastId"
+    );
+
+    const lastInsertId = insertedIdResult[0].lastId;
+    const lastRecord = lastInsertId + result.affectedRows - 1; // Calcular el último ID insertado si es necesario
+
     return NextResponse.json({
       message: "Datos insertados exitosamente",
       affectedRows: result.affectedRows,
+      first_reg: lastInsertId, // Primer ID generado
+      last_reg: lastRecord, // Último ID generado (opcional, si necesitas el rango)
     });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });
