@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import { useState } from "react";
 import ExcelJS from "exceljs";
 import axios from "axios";
@@ -217,7 +218,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[7] / rowValues[11]).toFixed(2))
             : rowValues[7], // BI Gravado DG
@@ -240,7 +246,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[8] / rowValues[11]).toFixed(2))
             : rowValues[8], // IGV / IPM DG
@@ -263,7 +274,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[14] / rowValues[11]).toFixed(2))
             : rowValues[14], // BI Gravado DGNG
@@ -286,7 +302,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[15] / rowValues[11]).toFixed(2))
             : rowValues[15], // IGV / IPM DGNG
@@ -309,7 +330,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[16] / rowValues[11]).toFixed(2))
             : rowValues[16], // BI Gravado DNG
@@ -332,7 +358,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[17] / rowValues[11]).toFixed(2))
             : rowValues[17], // IGV / IPM DNG
@@ -355,7 +386,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[12] / rowValues[11]).toFixed(2))
             : rowValues[12], // valor adquirido
@@ -378,7 +414,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[18] / rowValues[11]).toFixed(2))
             : rowValues[18], // ISC
@@ -401,7 +442,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           //...rowValues.slice(5, 6)
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[19] / rowValues[11]).toFixed(2))
             : rowValues[19], // ICBPER
@@ -423,7 +469,12 @@ function Excelfile() {
           `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
 
           rowValues[5],
-          rowValues[6].substring(0, 40), //nombre
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido", //nombre
+
           rowValues[10] === "USD"
             ? parseFloat((rowValues[13] / rowValues[11]).toFixed(2))
             : rowValues[13], // otros tributos
@@ -445,7 +496,12 @@ function Excelfile() {
         codigoMap[rowValues[2]] || rowValues[2], // tipo cp
         `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`, // serie
         rowValues[5],
-        rowValues[6].substring(0, 40), // nombre
+        typeof rowValues[6] === "string"
+          ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+          : typeof rowValues[6] === "number"
+          ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+          : "Dato inválido", //nombre
+
         rowValues[10] === "USD"
           ? parseFloat((rowValues[9] / rowValues[11]).toFixed(2))
           : rowValues[9], // monto del total
@@ -540,7 +596,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`, // Numero de documento
           identificacion: rowValues[5], // Aparecer a partir de la segunda repeticion de codigo de anexo
 
-          nombre: rowValues[6].substring(0, 40), // Glosa Principal y Glosa Detalle
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido", // Glosa Principal y Glosa Detalle
           // Importe Original
           monto:
             rowValues[10] === "USD"
@@ -577,7 +638,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[8] / rowValues[11]).toFixed(2))
@@ -613,7 +679,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[14] / rowValues[11]).toFixed(2))
@@ -649,7 +720,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[15] / rowValues[11]).toFixed(2))
@@ -685,7 +761,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[16] / rowValues[11]).toFixed(2))
@@ -721,7 +802,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[17] / rowValues[11]).toFixed(2))
@@ -757,7 +843,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[12] / rowValues[11]).toFixed(2))
@@ -793,7 +884,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[18] / rowValues[11]).toFixed(2))
@@ -829,7 +925,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[19] / rowValues[11]).toFixed(2))
@@ -864,7 +965,12 @@ function Excelfile() {
           serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
           identificacion: rowValues[5],
 
-          nombre: rowValues[6].substring(0, 40),
+          nombre:
+            typeof rowValues[6] === "string"
+              ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+              : typeof rowValues[6] === "number"
+              ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+              : "Dato inválido",
           monto:
             rowValues[10] === "USD"
               ? parseFloat((rowValues[13] / rowValues[11]).toFixed(2))
@@ -901,7 +1007,12 @@ function Excelfile() {
         serie: `${rowValues[3]}-${String(rowValues[4]).padStart(8, "0")}`,
         identificacion: rowValues[5],
 
-        nombre: rowValues[6].substring(0, 40),
+        nombre:
+          typeof rowValues[6] === "string"
+            ? rowValues[6].substring(0, 40) // Si es string, truncar a 40 caracteres
+            : typeof rowValues[6] === "number"
+            ? rowValues[6].toString().substring(0, 40) // Convertir número a string y truncar
+            : "Dato inválido",
         monto:
           rowValues[10] === "USD"
             ? parseFloat((rowValues[9] / rowValues[11]).toFixed(2))
@@ -1048,16 +1159,25 @@ function Excelfile() {
               id="option-two"
               onClick={() => setShowInput(true)}
             />
-            <Label htmlFor="option-two">Asignar numero</Label>
+            <Label htmlFor="option-two">
+              Asignar numero (Usar el boton rojo Numero de registro reciente)
+            </Label>
           </div>
           {showInput && (
-            <div className="py-2 flex gap-4">
-              <Input
-                type="number"
-                placeholder="Número"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
+            <div>
+              <div className="py-2 flex gap-4">
+                <Input
+                  type="number"
+                  placeholder="Número"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <Label>
+                Debe colocar el numero que le continua al numero de registro
+                reciente
+              </Label>
             </div>
           )}
           <div className="pt-4 flex gap-4">
