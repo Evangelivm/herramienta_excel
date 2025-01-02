@@ -38,6 +38,7 @@ function Excelfile() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState("");
   const currentMonth = new Date().getMonth() + 1; // Obtener el mes actual (0 = Enero, 11 = Diciembre)
+  const currentYear = new Date().getFullYear(); // Obtener el año actual
   const meses = [
     { value: "01", label: "Enero" },
     { value: "02", label: "Febrero" },
@@ -82,14 +83,27 @@ function Excelfile() {
     setSelectedMonth(mesValue);
     setButtonDisabled(false);
   };
-  // Filtrar los meses para que solo se muestren aquellos antes o igual al mes actual
-  const filteredMeses = meses.filter(
-    (mes) => parseInt(mes.value) <= currentMonth
-  );
+  // Construir la lista de meses
+  let filteredMeses = [];
+
+  // Incluir diciembre del año anterior para enero y febrero
+  if (currentMonth === 1 || currentMonth === 2) {
+    filteredMeses = [
+      { value: "12", label: "Diciembre", year: currentYear - 1 }, // Diciembre del año anterior
+      ...meses
+        .filter((mes) => parseInt(mes.value) <= currentMonth) // Meses del año actual
+        .map((mes) => ({ ...mes, year: currentYear })),
+    ];
+  } else {
+    // A partir de marzo, incluir meses acumulativos del año actual
+    filteredMeses = meses
+      .filter((mes) => parseInt(mes.value) <= currentMonth) // Meses desde enero hasta el mes actual
+      .map((mes) => ({ ...mes, year: currentYear }));
+  }
 
   // Modificar la etiqueta del mes actual para incluir "(Actual)"
   const mesesConEtiqueta = filteredMeses.map((mes) => {
-    if (parseInt(mes.value) === currentMonth) {
+    if (parseInt(mes.value) === currentMonth && mes.year === currentYear) {
       return { ...mes, label: `${mes.label} (Actual)` };
     }
     return mes;
